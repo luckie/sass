@@ -732,6 +732,16 @@ module Sass::Script
       color.with(:hue => color.hue + degrees.value)
     end
     declare :adjust_hue, [:color, :degrees]
+    
+    # returns an IE hex string for a color with an alpha channel
+    # suitable for passing to IE filters.
+    def ie_hex_str(color)
+      assert_type color, :Color
+      alpha = (color.alpha * 255).round
+      alphastr = alpha.to_s(16).rjust(2, '0')
+      Sass::Script::String.new("##{alphastr}#{color.send(:hex_str)[1..-1]}".upcase)
+    end
+    declare :ie_hex_str, [:color]
 
     # Adjusts one or more properties of a color.
     # This can change the red, green, blue, hue, saturation, value, and alpha properties.
